@@ -1,0 +1,40 @@
+class DSU{
+    private:
+        vector<int> rank,parent;
+
+    public:
+        DSU(int n){
+            rank.assign(n,0);
+            parent.assign(n,0);
+
+            for(int i=0;i<n;i++){
+                parent[i] = i;
+            }
+        }
+
+        // find function
+        int findu(int node){
+            // if node is itself it's parent then only it will be it's ultimate parent
+            if(node == parent[node]) return node;
+            
+            return parent[node] = findu(parent[node]);
+        }
+
+        bool unionByRank(int u,int v){
+            int up = findu(u);
+            int vp = findu(v);
+
+            if(up == vp) return false;
+            if(rank[up]<=rank[vp]){
+                parent[up] = vp;   // greater in the rank would be the parent
+
+                if(rank[up] == rank[vp]){
+                    rank[vp]++;   // parent rank should be always higher
+                }
+            }else{
+                parent[vp] = up;
+            }
+
+            return true;
+        }
+};
